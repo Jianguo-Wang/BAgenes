@@ -43,6 +43,9 @@ get_1v1<-function(human_species){
 	return(human_species_conf_uniq)
 }
 
+
+
+
 human_macaque_1v1<-get_1v1(human_macaque)
 human_mouse_1v1<-get_1v1(human_mouse)
 human_opossum_1v1<-get_1v1(human_opossum)
@@ -52,7 +55,7 @@ human_rat_1v1<-get_1v1(human_rat)
 
 #
 
-human_ensembl_union<-sort(unique(c(human_macaque_1v1[,1],human_mouse_1v1[,1],human_opossum_1v1[,1],human_rabbit_1v1[,1],human_rat_1v1[,1])))
+human_ensembl_union<-sort(unique(c(human_macaque_1v1[,1],human_mouse_1v1[,1],human_rat_1v1[,1],human_rabbit_1v1[,1],human_opossum_1v1[,1])))
 
 human_ensembl_correspond<-data.frame(human_ensembl=human_ensembl_union)
 human_ensembl_correspond$macaque_ensembl<-rep(NA,length(human_ensembl_union))
@@ -79,8 +82,8 @@ extract_exp_correspond<-function(organ,stage){
 		macaque=rep(NA,dim(human_ensembl_correspond)[1]),
 		mouse=rep(NA,dim(human_ensembl_correspond)[1]),
 		rat=rep(NA,dim(human_ensembl_correspond)[1]),
-		opossum=rep(NA,dim(human_ensembl_correspond)[1]),
-		rabbit=rep(NA,dim(human_ensembl_correspond)[1]))
+		rabbit=rep(NA,dim(human_ensembl_correspond)[1]),
+		opossum=rep(NA,dim(human_ensembl_correspond)[1]))
 	
 	human_ind<-which(grepl(paste0(organ,"\\.",stage_inf[match(stage,stage_inf$stage),"human"],"\\."),names(human)))
 	macaque_ind<-which(grepl(paste0(organ,"\\.",stage_inf[match(stage,stage_inf$stage),"macaque"],"\\."),names(macaque)))
@@ -117,13 +120,6 @@ extract_exp_correspond<-function(organ,stage){
 		temp$rat[which(!is.na(match(human_ensembl_correspond$rat_ensembl,rat[,1])))]<-rat[na.omit(match(human_ensembl_correspond$rat_ensembl,rat[,1])),rat_ind]
 	}
 	
-	if(length(opossum_ind)>1){
-		temp$opossum[which(!is.na(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])))]<-apply(opossum[na.omit(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])),opossum_ind],1,mean,na.rm=T)	
-	}
-	if(length(opossum_ind)==1){
-		temp$opossum[which(!is.na(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])))]<-opossum[na.omit(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])),opossum_ind]	
-	}
-
 	if(length(rabbit_ind)>1){
 		temp$rabbit[which(!is.na(match(human_ensembl_correspond$rabbit_ensembl,rabbit[,1])))]<-apply(rabbit[na.omit(match(human_ensembl_correspond$rabbit_ensembl,rabbit[,1])),rabbit_ind],1,mean,na.rm=T)
 	}
@@ -131,6 +127,14 @@ extract_exp_correspond<-function(organ,stage){
 		temp$rabbit[which(!is.na(match(human_ensembl_correspond$rabbit_ensembl,rabbit[,1])))]<-rabbit[na.omit(match(human_ensembl_correspond$rabbit_ensembl,rabbit[,1])),rabbit_ind]
 	}
 	
+	if(length(opossum_ind)>1){
+		temp$opossum[which(!is.na(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])))]<-apply(opossum[na.omit(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])),opossum_ind],1,mean,na.rm=T)	
+	}
+	if(length(opossum_ind)==1){
+		temp$opossum[which(!is.na(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])))]<-opossum[na.omit(match(human_ensembl_correspond$opossum_ensembl,opossum[,1])),opossum_ind]	
+	}
+
+
 	row.names(temp)<-human_ensembl_correspond$human_ensembl
 	
 	return(temp)
@@ -492,7 +496,7 @@ addWorksheet(wb, "pvalue")
 writeData(wb, sheet = 2, x = pvalues2_df,keepNA=TRUE)
 
 # Save the workbook to a file
-saveWorkbook(wb, file = "F:/wangj/Desktop/temp/brain asymmetry/MS/Tab.S5-Brain_Specificity_Index_of_Species_Pairs_Across_Stages.xlsx", overwrite = TRUE)
+saveWorkbook(wb, file = "F:/wangj/Desktop/temp/brain asymmetry/MS/Tab.S6-Brain_Specificity_Index_of_Species_Pairs_Across_Stages.xlsx", overwrite = TRUE)
 
 
 
